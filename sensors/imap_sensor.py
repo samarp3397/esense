@@ -27,7 +27,7 @@ class IMAPSensor(PollingSensor):
                                          config=config,
                                          poll_interval=poll_interval)
 
-        self._trigger = 'seemail.imap.message'
+        self._trigger = 'semail.imap.message'
         self._logger = self._sensor_service.get_logger(__name__)   
         self._accounts = {}
 
