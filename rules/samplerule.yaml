@@ -1,5 +1,5 @@
 ---
-name: SampleRule
+name: Sample123
 description: "Rule which sends an email when an email from johndoe@gmail.com is received"
 pack: semail
 enabled: true
