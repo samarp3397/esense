@@ -1,6 +1,6 @@
 ---
 ref: semail
-name:semail
+name: semail
 description: E-Mail Actions/Sensors for StackStorm
 keywords:
   - email
