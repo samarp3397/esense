@@ -1,0 +1,43 @@
+---
+name: vm_create
+pack: semail
+runner_type: "python-script"
+description: action to create virtual machine on cloud  
+enabled: true
+entry_point: vm_create.py
+parameters:
+     Subcription_id:
+        type: string
+        description: Enter Subscription Id
+        required: true
+        position: 0
+     Group_Name:
+        type: string
+        description: Enter Group Name 
+        required: true
+        position: 1
+     Location:
+        type: string
+        description: Enter Location 
+        required: true
+        position: 2
+     VM_Name:
+        type: string
+        description: Enter VM Name 
+        required: true
+        position: 3
+     Client_Id:
+        type: string
+        description: Enter Client Id
+        required: true
+        position: 4
+     Secret:
+        type: string
+        description: Enter Secret String 
+        required: true
+        position: 5
+     Tenant_Id:
+        type: string
+        description: Enater Tenant id
+        required: true
+        position: 6
