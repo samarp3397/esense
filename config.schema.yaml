@@ -35,22 +35,8 @@ imap_accounts:
         description: "Set to False to disable secure protocol. Default value is True."
         type: "boolean"
         default: true
-      download_attachments:
-        description: "Set to True to download attachments to datastore. Default False"
-        type: "boolean"
-        default: false
       folder:
         description: "Folder to check for email. Default INBOX"
         type: "string"
         required: false
         default: "INBOX"
-max_attachment_size:
-  description: "Maxium size of downloaded attachment in bytes (default 1024)"
-  type: "integer"
-  required: false
-  default: 1024
-attachment_datastore_ttl:
-  description: "TTL in seconds to keep attachments in the datastore. Default 1800"
-  type: "integer"
-  required: false
-  default: 1800
