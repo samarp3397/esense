@@ -9,12 +9,12 @@ trigger_types:
     payload_info:
       - uid
       - from
-      - to
-      - headers
-      - subject
+      - to   
       - date
+      - subject
       - message_id
       - body      
+      - mailbox_metadata
       - location
       - vmname
       - group
