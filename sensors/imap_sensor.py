@@ -1,6 +1,7 @@
+import sys
 import hashlib
 import base64
-
+sys.path.append('/usr/local/lib/python2.7/dist-packages')
 import six
 import eventlet
 import easyimap
