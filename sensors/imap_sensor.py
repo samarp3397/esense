@@ -1,9 +1,10 @@
+import sys
+sys.path.append('/usr/local/lib/python2.7/dist-packages')
 import hashlib
+import easyimap
 import base64
-
 import six
 import eventlet
-import easyimap
 from flanker import mime
 
 from st2reactor.sensor.base import PollingSensor
@@ -19,8 +20,9 @@ eventlet.monkey_patch(
     thread=True,
     time=True)
 
+
 class IMAPSensor(PollingSensor):
-    def __init__(self, sensor_service, config=None, poll_interval=10):
+    def __init__(self, sensor_service, config=None, poll_interval=5):
         super(IMAPSensor, self).__init__(sensor_service=sensor_service,
                                          config=config,
                                          poll_interval=poll_interval)
@@ -62,7 +64,7 @@ class IMAPSensor(PollingSensor):
 
     def remove_trigger(self, trigger):
         pass
-
+    #Funtion to connect to Gmail using Imap 
     def _parse_accounts(self, accounts):
         for config in accounts:
             mailbox = config.get('name', None)
@@ -101,29 +103,30 @@ class IMAPSensor(PollingSensor):
                 }
             }
             self._accounts[mailbox] = item
-
+            
+    #Function to check for unread messages from gmail  
     def _poll_for_unread_messages(self, name, mailbox, mailbox_metadata):
         self._logger.debug('[IMAPSensor]: polling mailbox {0}'.format(name))
-
+        #reading unread messages from gmail 
         messages = mailbox.unseen()
 
         self._logger.debug('[IMAPSensor]: Processing {0} new messages'.format(len(messages)))
         for message in messages:
             self._process_message(uid=message.uid, mailbox=mailbox,                                  
                                   mailbox_metadata=mailbox_metadata)
-
-    def _process_message(self, uid, mailbox, mailbox_metadata):
+            
+    #Function to prosess the messages recieved 
+    def _process_message(self, uid, mailbox, mailbox_metadata):   
         m=[]
         message = mailbox.mail(uid, include_raw=True)
         mime_msg = mime.from_string(message.raw)
-
         body = message.body
         sent_from = message.from_addr
         sent_to = message.to
         subject = message.title
         date = message.date
         message_id = message.message_id
-        headers = mime_msg.headers.items()      
+        #Reading Body for vmname, location, group 
         x=body.splitlines()
         for x1 in x:
           res=x1.split('=')
@@ -131,39 +134,20 @@ class IMAPSensor(PollingSensor):
         location=m[0]
         vmname=m[1]
         group=m[2] 
-
-        # Flatten the headers so they can be unpickled
-        headers = self._flattern_headers(headers=headers)
-
+        
+        #Defining Payload 
         payload = {
             'uid': uid,
             'from': sent_from,
-            'to': sent_to,
-            'headers': headers,
+            'to': sent_to,           
             'date': date,
             'subject': subject,
             'message_id': message_id,
-            'body': body,          
+            'body': body,
             'mailbox_metadata': mailbox_metadata,
             'location': location,
             'vmname': vmname,
             'group': group
         }    
-
+        # Dispaching the trigger with the payload
         self._sensor_service.dispatch(trigger=self._trigger, payload=payload)
-
-    def _flattern_headers(self, headers):
-        # Flattern headers and make sure they only contain simple types so they
-        # can be serialized in a trigger
-        result = []
-
-        for pair in headers:
-            name = pair[0]
-            value = pair[1]
-
-            if not isinstance(value, six.string_types):
-                value = str(value)
-
-            result.append([name, value])
-
-        return result
