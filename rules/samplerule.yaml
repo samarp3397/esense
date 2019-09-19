@@ -12,5 +12,5 @@ criteria:
     type: contains
 action:
   ref: core.local
-  input:
-      cmd: echo HI
+  parameters:
+      cmd: echo "HI"
