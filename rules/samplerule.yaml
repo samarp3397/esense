@@ -13,4 +13,4 @@ criteria:
 action:
   ref: core.local
   input:
-      cmd: "HI"
+      cmd: echo HI
